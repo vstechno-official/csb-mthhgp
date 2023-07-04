@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap"
+      rel="stylesheet"
+    />
+    <title>Vedam</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  </head>
+  <body>
+    <h1 align="center">Vedam</h1>
+    <h2 align="center">
+      <a
+        href="vstechno-official.netlify.app"
+        align="center"
+        style="color: blue;"
+        >VSTECHNO</a
+      >
+    </h2>
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Ask a question" />
+      <button onclick="search()">Search</button>
+    </div>
+
+    <div id="searchResults"></div>
+    <footer>
+      <hr />
+      <h3 align="center" style="color: black;">Created by VSTECHNO</h3>
+      <h3 align="center">Special Thanks to Google</h3>
+    </footer>
+    <script>
+      function search() {
+        var query = document.getElementById("searchInput").value;
+        var apiKey = "AIzaSyDFJgaZbliwwkeLuJoE5j9mF_SskjgCGTY";
+        var cx = "458f1865ae83042e8";
+
+        var url =
+          "https://www.googleapis.com/customsearch/v1?key=" +
+          apiKey +
+          "&cx=" +
+          cx +
+          "&q=" +
+          query;
+
+        $.ajax({
+          url: url,
+          dataType: "json",
+          success: function (data) {
+            displayResults(data.items);
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+          }
+        });
+      }
+
+      function displayResults(results) {
+        var searchResultsDiv = document.getElementById("searchResults");
+        searchResultsDiv.innerHTML = "";
+
+        if (results.length === 0) {
+          searchResultsDiv.innerHTML = "<p>No results found.</p>";
+          return;
+        }
+
+        for (var i = 0; i < results.length; i++) {
+          var result = results[i];
+          var title = result.htmlTitle;
+          var snippet = result.htmlSnippet;
+          var link = result.link;
+
+          var resultDiv = document.createElement("div");
+          resultDiv.innerHTML =
+            "<h3><a href='" + link + "'>" + title + "</a></h3>";
+          resultDiv.innerHTML += "<p>" + snippet + "</p>";
+
+          searchResultsDiv.appendChild(resultDiv);
+        }
+      }
+    </script>
+  </body>
+</html>
